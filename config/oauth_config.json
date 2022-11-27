@@ -1,0 +1,22 @@
+{
+  "client_id": "_JwBA3smSS0zJS3COSqQ",
+  "client_secret": "Ns3ja5EzwlY4NU41RizV2IAMpCq2P5xW",
+  "authorize_url": "https://zoom.us/oauth/authorize",
+  "token_url": "https://zoom.us/oauth/token",
+  "options": {},
+  "token_type": "agent",
+  "oauth_iparams": {
+    "client_id": {
+      "display_name": "Zoom Client ID",
+      "description": "Please enter your Zoom client ID",
+      "type": "text",
+      "required": true
+    },
+    "client_secret": {
+      "display_name": "Zoom Client Secret",
+      "description": "Please enter your Zoom client secret",
+      "type": "text",
+      "required": true
+    }
+  }
+}
