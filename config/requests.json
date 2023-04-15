@@ -1,0 +1,13 @@
+{
+    "generateMeeting": {
+        "schema": {
+            "method": "POST",
+            "host": "api.zoom.us",
+            "path": "/v2/users/me/meetings",
+            "headers": {
+                "Authorization": "Bearer <%= access_token %>",
+                "Content-Type": "application/json"
+            }
+        }
+    }
+}

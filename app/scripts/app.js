@@ -14,65 +14,45 @@ $(document).on("click", "#generate", function () {
   });
   $("#loading").show();
   $("#displayDetails").hide();
-  client.data.get("ticket").then(
-    function (ticketData) {
-      var meetingAgenda =
-        ticketData.ticket.subject.length >= 300
-          ? ticketData.ticket.subject.substring(0, 255) + "..."
-          : ticketData.ticket.subject;
-      var headers = {
-        Authorization: "Bearer <%= access_token %>",
-        "Content-Type": "application/json"
-      },
-        reqData = {
-          headers: headers,
-          body: JSON.stringify({
-            topic: meetingAgenda
-          }),
-          isOAuth: true
-        },
-        url = "https://api.zoom.us/v2/users/me/meetings";
-      client.request.post(url, reqData).then(
-        function (data) {
-          $("#errorMsg,.generate,#loading").hide();
-          $("#displayDetails,.regenrate").show();
-          var sessionData = JSON.parse(data.response);
-          $("#meetingUrl")
-            .show()
-            .html("")
-            .append(
-              '<div class="pt12"><p><a target="_blank" href="' +
-              sessionData.join_url +
-              '">' +
-              sessionData.join_url +
-              "</a></p></div>"
-            );
-          var replyData = "";
-          replyData +=
-            "<p>Click the link below to start your Zoom session </p><p><a href='" +
-            sessionData.join_url +
-            "'";
-          replyData += " target='_blank'>" + sessionData.join_url + "</p>";
-          //Auto populate Link to reply redactor
-          client.interface.trigger("click", {
-            id: "reply",
-            text: replyData
-          });
-          client.interface.trigger("click", {
-            id: "openReply",
-            text: replyData,
-            replace: true
-          });
-        },
-        function (error) {
-          handleError(error);
-        }
-      );
-    },
-    function (error) {
+  client.data.get("ticket").then(function (ticketData) {
+    var meetingAgenda =
+      ticketData.ticket.subject.length >= 300
+        ? ticketData.ticket.subject.substring(0, 255) + "..."
+        : ticketData.ticket.subject;
+    reqData = {
+      body: JSON.stringify({
+        topic: meetingAgenda
+      }),isOAuth: true
+    };
+    generateMeeting();
+  }, function (error) {
+    handleError(error);
+  });
+
+  let generateMeeting = () => {
+    client.request.post(url, reqData).then(function (data) {
+      $("#errorMsg,.generate,#loading").hide();
+      $("#displayDetails,.regenrate").show();
+      var sessionData = JSON.parse(data.response);
+      $("#meetingUrl").show().html("").append('<div class="pt12"><p><a target="_blank" href="' + sessionData.join_url + '">' +
+        sessionData.join_url + "</a></p></div>");
+      var replyData = "";
+      replyData += "<p>Click the link below to start your Zoom session </p><p><a href='" + sessionData.join_url + "'";
+      replyData += " target='_blank'>" + sessionData.join_url + "</p>";
+      //Auto populate Link to reply redactor
+      client.interface.trigger("click", {
+        id: "reply",
+        text: replyData
+      });
+      client.interface.trigger("click", {
+        id: "openReply",
+        text: replyData,
+        replace: true
+      });
+    }, function (error) {
       handleError(error);
-    }
-  );
+    });
+  }
   //Error Handling block
   function handleError(e) {
     if (e.status == 400) {

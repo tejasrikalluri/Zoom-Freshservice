@@ -1,5 +1,5 @@
 {
-  "platform-version": "2.2",
+  "platform-version": "2.3",
   "product": {
     "freshservice": {
       "location": {
@@ -8,13 +8,13 @@
           "icon": "zoom.svg"
         }
       }
+    },
+    "requests": {
+      "generateMeeting": {}
     }
   },
-  "whitelisted-domains": [
-    "https://api.zoom.us"
-  ],
   "engines": {
-    "node": "14.17.3",
-    "fdk": "8.6.6"
+    "node": "14.21.3",
+    "fdk": "9.0.0"
   }
 }
