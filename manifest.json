@@ -7,10 +7,10 @@
           "url": "template.html",
           "icon": "zoom.svg"
         }
+      },
+      "requests": {
+        "generateMeeting": {}
       }
-    },
-    "requests": {
-      "generateMeeting": {}
     }
   },
   "engines": {

@@ -1,9 +1,7 @@
-var client;
-
 init();
 
 async function init() {
-  client = await app.initialized();
+  window.client = await app.initialized();
   client.events.on("app.activated", renderText);
 }
 $(document).on("click", "#generate", function () {
@@ -19,39 +17,38 @@ $(document).on("click", "#generate", function () {
       ticketData.ticket.subject.length >= 300
         ? ticketData.ticket.subject.substring(0, 255) + "..."
         : ticketData.ticket.subject;
-    reqData = {
-      body: JSON.stringify({
-        topic: meetingAgenda
-      }),isOAuth: true
-    };
-    generateMeeting();
+    generateMeeting(meetingAgenda);
   }, function (error) {
     handleError(error);
   });
 
-  let generateMeeting = () => {
-    client.request.post(url, reqData).then(function (data) {
-      $("#errorMsg,.generate,#loading").hide();
-      $("#displayDetails,.regenrate").show();
-      var sessionData = JSON.parse(data.response);
-      $("#meetingUrl").show().html("").append('<div class="pt12"><p><a target="_blank" href="' + sessionData.join_url + '">' +
-        sessionData.join_url + "</a></p></div>");
-      var replyData = "";
-      replyData += "<p>Click the link below to start your Zoom session </p><p><a href='" + sessionData.join_url + "'";
-      replyData += " target='_blank'>" + sessionData.join_url + "</p>";
-      //Auto populate Link to reply redactor
-      client.interface.trigger("click", {
-        id: "reply",
-        text: replyData
-      });
-      client.interface.trigger("click", {
-        id: "openReply",
-        text: replyData,
-        replace: true
-      });
-    }, function (error) {
+  //generate meeting
+  let generateMeeting = async (meetingAgenda) => {
+    try {
+      let data = await client.request.invokeTemplate("generateMeeting", { body: JSON.stringify({ topic: meetingAgenda }) });
+      if (data) {
+        $("#errorMsg,.generate,#loading").hide();
+        $("#displayDetails,.regenrate").show();
+        var sessionData = JSON.parse(data.response);
+        $("#meetingUrl").show().html("").append('<div class="pt12"><p><a target="_blank" href="' + sessionData.join_url + '">' +
+          sessionData.join_url + "</a></p></div>");
+        var replyData = "";
+        replyData += "<p>Click the link below to start your Zoom session </p><p><a href='" + sessionData.join_url + "'";
+        replyData += " target='_blank'>" + sessionData.join_url + "</p>";
+        //Auto populate Link to reply redactor
+        client.interface.trigger("click", {
+          id: "reply",
+          text: replyData
+        });
+        client.interface.trigger("click", {
+          id: "openReply",
+          text: replyData,
+          replace: true
+        });
+      }
+    } catch (error) {
       handleError(error);
-    });
+    }
   }
   //Error Handling block
   function handleError(e) {
@@ -71,9 +68,15 @@ $(document).on("click", "#generate", function () {
       notifyMsg(
         "<span>Unexpected error occurred, Please try after sometime.</span>"
       );
-    } else if (e.status == 503) {
+    } else
+      handleOtherErrors(e);
+  }
+  //handle other errors
+  let handleOtherErrors = (e) => {
+    if (e.status == 503) {
       notifyMsg("<span>Service Unavailable, Please try after sometime.</span>");
-    } else if (e.status == 404) {
+    }
+    else if (e.status == 404) {
       notifyMsg("<span>Page Not Found.</span>");
     } else {
       notifyMsg("<span>" + e.message + "</span>");

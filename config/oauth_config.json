@@ -1,6 +1,6 @@
 {
-  "client_id": "_JwBA3smSS0zJS3COSqQ",
-  "client_secret": "Ns3ja5EzwlY4NU41RizV2IAMpCq2P5xW",
+  "client_id": "N0heDgAoRTJIaP9Czv8pQ",
+  "client_secret": "UJ0exo0kZ5L3ly1JehXgsp3P9FQxEe8W",
   "authorize_url": "https://zoom.us/oauth/authorize",
   "token_url": "https://zoom.us/oauth/token",
   "options": {},
