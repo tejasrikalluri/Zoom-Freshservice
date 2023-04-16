@@ -1,7 +1,8 @@
+var client;
 init();
 
 async function init() {
-  window.client = await app.initialized();
+  client = await app.initialized();
   client.events.on("app.activated", renderText);
 }
 $(document).on("click", "#generate", function () {

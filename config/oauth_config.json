@@ -1,10 +1,10 @@
 {
-  "client_id": "N0heDgAoRTJIaP9Czv8pQ",
-  "client_secret": "UJ0exo0kZ5L3ly1JehXgsp3P9FQxEe8W",
+  "client_id": "<%= oauth_iparams.client_id%>",
+  "client_secret": "<%= oauth_iparams.client_secret%>",
   "authorize_url": "https://zoom.us/oauth/authorize",
   "token_url": "https://zoom.us/oauth/token",
   "options": {},
-  "token_type": "agent",
+  "token_type": "account",
   "oauth_iparams": {
     "client_id": {
       "display_name": "Zoom Client ID",
